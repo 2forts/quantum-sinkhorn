@@ -104,13 +104,10 @@ If you use this code, please cite:
 ```
 @article{yourkey2025sinkhorn,
   title={Entropic optimal transport with quantum amplitude estimation},
-  author={Your Name and Coauthors},
+  author={Orts, Francisco},
   journal={npj Quantum Information},
   year={2025}
 }
-```
-
-A permanent snapshot with DOI will be available via Zenodo.
 
 ---
 
