@@ -102,7 +102,7 @@ Exact details are described in the *Methods* section of the manuscript.
 If you use this code, please cite:
 
 ```
-@article{yourkey2025sinkhorn,
+@article{orts2025sinkhorn,
   title={Entropic optimal transport with quantum amplitude estimation},
   author={Orts, Francisco},
   journal={npj Quantum Information},
@@ -119,4 +119,4 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) for detai
 
 ## ✨ Acknowledgements
 
-This work was supported by [your institution / funding body]. We thank the open-source community for providing the tools that made this project possible.
+This work was supported by project PID2021-123278OB-I00 (funded by MCIN/AEI/10.13039/501100011033/FEDER "A way to make Europe"), and from the assistance with reference POST_2024_00998 funded by the Regional Government of Andalusia/CUII and the ESF+. We thank the open-source community for providing the tools that made this project possible.
