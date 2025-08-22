@@ -1,4 +1,4 @@
-# Quantum Sinkhorn: Hybrid Quantum–Classical Algorithm for Entropic Optimal Transport
+# Quantum Sinkhorn: Hybrid Quantum-Classical Algorithm for Entropic Optimal Transport
 
 This repository contains the simulation code, numerical experiments, and figure-generation scripts accompanying the paper:
 
