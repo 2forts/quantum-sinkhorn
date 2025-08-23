@@ -17,7 +17,9 @@ from src.classical_sinkhorn import sinkhorn as classical_sinkhorn, compute_cost 
 from src.quantum_sinkhorn_sim import quantum_sinkhorn_sim, hadamard_cost_sim
 from src import utils
 
-def run(n=16, tau=1.0, tol=1e-4, ae_eps_list=(0.05,0.03,0.02,0.01), seed=123, outdir="../figures"):
+
+def run(n=16, tau=1.0, tol=1e-4, ae_eps_list=(0.05, 0.03, 0.02, 0.01),
+        seed=123, outdir="../figures", shots_factor=100):
     C = utils.generate_cost_matrix(n, seed=seed)
     mu = utils.normalize_distribution(np.ones(n))
     nu = utils.normalize_distribution(np.ones(n))
@@ -33,15 +35,17 @@ def run(n=16, tau=1.0, tol=1e-4, ae_eps_list=(0.05,0.03,0.02,0.01), seed=123, ou
     for ae in ae_eps_list:
         u_q, v_q, gamma_q, iters_q, info = quantum_sinkhorn_sim(
             C, mu, nu, tau=tau, tol=tol, ae_eps=ae, max_iter=5000,
-            shots_factor=100, use_exact_norm=True, seed=seed, return_history=True
+            shots_factor=shots_factor, use_exact_norm=True, seed=seed, return_history=True
         )
-        _, noisy = hadamard_cost_sim(C, u_q, v_q, info["K"], np.random.default_rng(seed+1), ae_eps=ae)
+        _, noisy = hadamard_cost_sim(C, u_q, v_q, info["K"],
+                                     np.random.default_rng(seed+1), ae_eps=ae)
         noisy_vals.append(noisy)
     
     # Plot absolute error vs ae_eps
     plt.figure()
     x = np.array(ae_eps_list, dtype=float)
-    plt.plot(x, np.abs(np.array(noisy_vals) - exact), marker="o", linestyle="-", label="|Noisy cost - Exact|")
+    plt.plot(x, np.abs(np.array(noisy_vals) - exact), marker="o", linestyle="-",
+             label="|Noisy cost - Exact|")
     plt.gca().invert_xaxis()  # smaller epsilon to the right
     plt.xlabel("Target QAE precision (ae_eps)")
     plt.ylabel("Absolute cost error")
@@ -52,6 +56,7 @@ def run(n=16, tau=1.0, tol=1e-4, ae_eps_list=(0.05,0.03,0.02,0.01), seed=123, ou
     plt.savefig(fpath, bbox_inches="tight", dpi=180)
     print("Saved:", fpath)
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Cost estimation experiment")
     parser.add_argument("--n", type=int, default=16)
@@ -59,5 +64,12 @@ if __name__ == "__main__":
     parser.add_argument("--tol", type=float, default=1e-4)
     parser.add_argument("--seed", type=int, default=123)
     parser.add_argument("--outdir", type=str, default="../figures")
+    parser.add_argument("--ae_eps_list", type=float, nargs="+",
+                        default=[0.05, 0.03, 0.02, 0.01],
+                        help="List of amplitude estimation epsilons to test")
+    parser.add_argument("--shots_factor", type=int, default=100,
+                        help="Factor controlling number of multinomial samples in AE simulation")
     args = parser.parse_args()
-    run(n=args.n, tau=args.tau, tol=args.tol, seed=args.seed, outdir=args.outdir)
+    run(n=args.n, tau=args.tau, tol=args.tol,
+        ae_eps_list=args.ae_eps_list, seed=args.seed,
+        outdir=args.outdir, shots_factor=args.shots_factor)
