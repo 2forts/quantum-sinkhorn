@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-\"\"\"
+"""
 classical_sinkhorn.py
 Basic implementation of entropic optimal transport via classical Sinkhorn scaling.
-\"\"\"
+"""
 
 import argparse
 import numpy as np
@@ -17,7 +17,7 @@ except ImportError:
     utils = None
 
 def sinkhorn(C, mu, nu, tau=1.0, eps=1e-4, max_iter=5000, return_history=False):
-    \"\"\"
+    """
     Classical Sinkhorn scaling for entropic OT.
     
     Args:
@@ -31,7 +31,7 @@ def sinkhorn(C, mu, nu, tau=1.0, eps=1e-4, max_iter=5000, return_history=False):
         
     Returns:
         u, v, gamma, iters, err (if return_history) 
-    \"\"\"
+    """
     n, m = C.shape
     # Gibbs kernel
     K = np.exp(-tau * C)
@@ -74,17 +74,17 @@ def sinkhorn(C, mu, nu, tau=1.0, eps=1e-4, max_iter=5000, return_history=False):
     return u, v, gamma, t
 
 def compute_cost(C, gamma):
-    \"\"\"Transport cost <C, gamma>.\"\"\"
+    """Transport cost <C, gamma>."""
     return float(np.sum(C * gamma))
 
 def main():
-    parser = argparse.ArgumentParser(description=\"Classical Sinkhorn for entropic OT\")
-    parser.add_argument(\"--n\", type=int, default=8, help=\"Problem size n (square n x n)\")
-    parser.add_argument(\"--tau\", type=float, default=1.0, help=\"Entropic parameter tau (>0)\")
-    parser.add_argument(\"--eps\", type=float, default=1e-4, help=\"Stopping tolerance on L1 marginal error\")
-    parser.add_argument(\"--max_iter\", type=int, default=5000, help=\"Maximum iterations\")
-    parser.add_argument(\"--seed\", type=int, default=42, help=\"Random seed\")
-    parser.add_argument(\"--save\", type=str, default=\"\", help=\"Optional path to save results (npz)\")
+    parser = argparse.ArgumentParser(description="Classical Sinkhorn for entropic OT")
+    parser.add_argument("--n", type=int, default=8, help="Problem size n (square n x n)")
+    parser.add_argument("--tau", type=float, default=1.0, help="Entropic parameter tau (>0)")
+    parser.add_argument("--eps", type=float, default=1e-4, help="Stopping tolerance on L1 marginal error")
+    parser.add_argument("--max_iter", type=int, default=5000, help="Maximum iterations")
+    parser.add_argument("--seed", type=int, default=42, help="Random seed")
+    parser.add_argument("--save", type=str, default="", help="Optional path to save results (npz)")
     args = parser.parse_args()
     
     rng = np.random.default_rng(args.seed)
@@ -103,16 +103,16 @@ def main():
     u, v, gamma, iters, err_hist = sinkhorn(C, mu, nu, tau=args.tau, eps=args.eps, max_iter=args.max_iter, return_history=True)
     cost = compute_cost(C, gamma)
     
-    print(f\"[Sinkhorn] n={args.n}, tau={args.tau}, eps={args.eps}\")
-    print(f\"  Converged in {iters} iterations\")
-    print(f\"  Transport cost <C, gamma> = {cost:.6f}\")
-    print(f\"  Final marginal L1 error   = {err_hist[-1] if len(err_hist)>0 else np.nan:.3e}\")
+    print(f"[Sinkhorn] n={args.n}, tau={args.tau}, eps={args.eps}")
+    print(f"  Converged in {iters} iterations")
+    print(f"  Transport cost <C, gamma> = {cost:.6f}")
+    print(f"  Final marginal L1 error   = {err_hist[-1] if len(err_hist)>0 else np.nan:.3e}")
     
     if args.save:
         out_path = Path(args.save)
         out_path.parent.mkdir(parents=True, exist_ok=True)
         np.savez(out_path, C=C, mu=mu, nu=nu, u=u, v=v, gamma=gamma, iters=iters, err_hist=err_hist, tau=args.tau, eps=args.eps)
-        print(f\"Saved results to {out_path}\")
+        print(f"Saved results to {out_path}")
     
-if __name__ == \"__main__\":
+if __name__ == "__main__":
     main()

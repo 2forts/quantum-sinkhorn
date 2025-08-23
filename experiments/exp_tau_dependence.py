@@ -13,9 +13,9 @@ this_dir = os.path.dirname(os.path.abspath(__file__))
 repo_root = os.path.abspath(os.path.join(this_dir, ".."))
 sys.path.append(repo_root)
 
-from classical_sinkhorn import sinkhorn as classical_sinkhorn
-from quantum_sinkhorn_sim import quantum_sinkhorn_sim
-import utils
+from src.classical_sinkhorn import sinkhorn as classical_sinkhorn
+from src.quantum_sinkhorn_sim import quantum_sinkhorn_sim
+from src import utils
 
 def run(n=16, taus=(0.2, 0.5, 1.0, 2.0, 5.0), tol=1e-4, ae_eps=0.02, seed=7, outdir="../figures"):
     C = utils.generate_cost_matrix(n, seed=seed)
