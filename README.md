@@ -108,6 +108,7 @@ If you use this code, please cite:
   journal={npj Quantum Information},
   year={2025}
 }
+```
 
 ---
 
